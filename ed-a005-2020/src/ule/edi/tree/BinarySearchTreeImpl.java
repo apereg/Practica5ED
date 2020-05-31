@@ -1,6 +1,5 @@
 package ule.edi.tree;
 
-
 import java.util.Collection;
 import java.util.Iterator;
 import java.util.LinkedList;
@@ -8,68 +7,57 @@ import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.Queue;
 
-
 /**
- * Árbol binario de búsqueda (binary search tree, BST).
+ * Ã�rbol binario de bÃºsqueda (binary search tree, BST).
  * 
- * El código fuente está en UTF-8, y la constante 
- * EMPTY_TREE_MARK definida en AbstractTreeADT del
- * proyecto API debería ser el símbolo de conjunto vacío: ∅
+ * El cÃ³digo fuente estÃ¡ en UTF-8, y la constante EMPTY_TREE_MARK definida en
+ * AbstractTreeADT del proyecto API deberÃ­a ser el sÃ­mbolo de conjunto vacÃ­o:
+ * âˆ…
  * 
- * Si aparecen caracteres "raros", es porque
- * el proyecto no está bien configurado en Eclipse para
- * usar esa codificación de caracteres.
+ * Si aparecen caracteres "raros", es porque el proyecto no estÃ¡ bien
+ * configurado en Eclipse para usar esa codificaciÃ³n de caracteres.
  *
- * En el toString() que está ya implementado en AbstractTreeADT
- * se usa el formato:
+ * En el toString() que estÃ¡ ya implementado en AbstractTreeADT se usa el
+ * formato:
  * 
- * 		Un árbol vacío se representa como "∅". Un árbol no vacío
- * 		como "{(información raíz), sub-árbol 1, sub-árbol 2, ...}".
+ * Un Ã¡rbol vacÃ­o se representa como "âˆ…". Un Ã¡rbol no vacÃ­o como
+ * "{(informaciÃ³n raÃ­z), sub-Ã¡rbol 1, sub-Ã¡rbol 2, ...}".
  * 
- * 		Por ejemplo, {A, {B, ∅, ∅}, ∅} es un árbol binario con 
- * 		raíz "A" y un único sub-árbol, a su izquierda, con raíz "B".
+ * Por ejemplo, {A, {B, âˆ…, âˆ…}, âˆ…} es un Ã¡rbol binario con raÃ­z "A" y un
+ * Ãºnico sub-Ã¡rbol, a su izquierda, con raÃ­z "B".
  * 
- * El método render() también representa un árbol, pero con otro
- * formato; por ejemplo, un árbol {M, {E, ∅, ∅}, {S, ∅, ∅}} se
- * muestra como:
+ * El mÃ©todo render() tambiÃ©n representa un Ã¡rbol, pero con otro formato; por
+ * ejemplo, un Ã¡rbol {M, {E, âˆ…, âˆ…}, {S, âˆ…, âˆ…}} se muestra como:
  * 
- * M
- * |  E
- * |  |  ∅
- * |  |  ∅
- * |  S
- * |  |  ∅
- * |  |  ∅
+ * M | E | | âˆ… | | âˆ… | S | | âˆ… | | âˆ…
  * 
- * Cualquier nodo puede llevar asociados pares (clave,valor) para
- * adjuntar información extra. Si es el caso, tanto toString() como
- * render() mostrarán los pares asociados a cada nodo.
+ * Cualquier nodo puede llevar asociados pares (clave,valor) para adjuntar
+ * informaciÃ³n extra. Si es el caso, tanto toString() como render() mostrarÃ¡n
+ * los pares asociados a cada nodo.
  * 
- * Con {@link #setTag(String, Object)} se inserta un par (clave,valor)
- * y con {@link #getTag(String)} se consulta.
+ * Con {@link #setTag(String, Object)} se inserta un par (clave,valor) y con
+ * {@link #getTag(String)} se consulta.
  * 
  * 
- * Con <T extends Comparable<? super T>> se pide que exista un orden en
- * los elementos. Se necesita para poder comparar elementos al insertar.
+ * Con <T extends Comparable<? super T>> se pide que exista un orden en los
+ * elementos. Se necesita para poder comparar elementos al insertar.
  * 
- * Si se usara <T extends Comparable<T>> sería muy restrictivo; en
- * su lugar se permiten tipos que sean comparables no sólo con exactamente
- * T sino también con tipos por encima de T en la herencia.
+ * Si se usara <T extends Comparable<T>> serÃ­a muy restrictivo; en su lugar se
+ * permiten tipos que sean comparables no sÃ³lo con exactamente T sino tambiÃ©n
+ * con tipos por encima de T en la herencia.
  * 
- * @param <T>
- *            tipo de la información en cada nodo, comparable.
+ * @param <T> tipo de la informaciÃ³n en cada nodo, comparable.
  */
-public class BinarySearchTreeImpl<T extends Comparable<? super T>> extends
-		AbstractBinaryTreeADT<T> {
+public class BinarySearchTreeImpl<T extends Comparable<? super T>> extends AbstractBinaryTreeADT<T> {
 
-   BinarySearchTreeImpl<T> father;  //referencia a su nodo padre)
+	BinarySearchTreeImpl<T> father; // referencia a su nodo padre)
 
 	/**
-	 * Devuelve el árbol binario de búsqueda izquierdo.
+	 * Devuelve el Ã¡rbol binario de bÃºsqueda izquierdo.
 	 */
 	protected BinarySearchTreeImpl<T> getLeftBST() {
-		//	El atributo leftSubtree es de tipo AbstractBinaryTreeADT<T> pero
-		//	aquí se sabe que es además de búsqueda binario
+		// El atributo leftSubtree es de tipo AbstractBinaryTreeADT<T> pero
+		// aquÃ­ se sabe que es ademÃ¡s de bÃºsqueda binario
 		//
 		return (BinarySearchTreeImpl<T>) leftSubtree;
 	}
@@ -77,9 +65,9 @@ public class BinarySearchTreeImpl<T extends Comparable<? super T>> extends
 	private void setLeftBST(BinarySearchTreeImpl<T> left) {
 		this.leftSubtree = left;
 	}
-	
+
 	/**
-	 * Devuelve el árbol binario de búsqueda derecho.
+	 * Devuelve el Ã¡rbol binario de bÃºsqueda derecho.
 	 */
 	protected BinarySearchTreeImpl<T> getRightBST() {
 		return (BinarySearchTreeImpl<T>) rightSubtree;
@@ -88,239 +76,311 @@ public class BinarySearchTreeImpl<T extends Comparable<? super T>> extends
 	private void setRightBST(BinarySearchTreeImpl<T> right) {
 		this.rightSubtree = right;
 	}
-	
+
 	/**
-	 * Árbol BST vacío
+	 * Ã�rbol BST vacÃ­o
 	 */
 	public BinarySearchTreeImpl() {
-		// TODO HACER QUE THIS SEA EL NODO VACÍO
-			
-	}
-	
-	public BinarySearchTreeImpl(BinarySearchTreeImpl<T> father) {
-		// TODO HACER QUE THIS SEA EL NODO VACÍO, asignando como padre el parámetro recibido
-		
+		this.father = this.emptyBST(null);
 	}
 
+	public BinarySearchTreeImpl(BinarySearchTreeImpl<T> father) {
+		this.father = father;
+
+	}
 
 	private BinarySearchTreeImpl<T> emptyBST(BinarySearchTreeImpl<T> father) {
 		return new BinarySearchTreeImpl<T>(father);
 	}
-	
+
 	/**
-	 * Inserta los elementos de una colección en el árbol.
-	 *  si alguno es 'null', NO INSERTA NINGUNO
+	 * Inserta los elementos de una colecciÃ³n en el Ã¡rbol. si alguno es 'null', NO
+	 * INSERTA NINGUNO
 	 * 
 	 * No se permiten elementos null.
 	 * 
-	 * @param elements
-	 *            valores a insertar.
-	 * @return numero de elementos insertados en el arbol (los que ya están no los inserta)
+	 * @param elements valores a insertar.
+	 * @return numero de elementos insertados en el arbol (los que ya estÃ¡n no los
+	 *         inserta)
 	 */
 	public int insert(Collection<T> elements) {
-		//	 si alguno es 'null', ni siquiera se comienza a insertar (no inserta ninguno)
-		//TODO Implementar el método
-		return 0;
+		/* Si alguno es 'null', ni siquiera se comienza a insertar (no inserta ninguno) */
+		for (T t : elements) 
+			if(t == null)
+				throw new IllegalArgumentException();
+		
+		int count = 0;
+		for (T t : elements) {
+			if(!this.contains(t)) {
+				this.insert(t);
+				count++;
+			}
+		}
+		
+		return count;
 	}
 
 	/**
-	 * Inserta los elementos de un array en el árbol.
-	 *  si alguno es 'null', NO INSERTA NINGUNO
+	 * Inserta los elementos de un array en el Ã¡rbol. si alguno es 'null', NO
+	 * INSERTA NINGUNO
 	 * 
 	 * No se permiten elementos null.
 	 * 
 	 * @param elements elementos a insertar.
-	 * @return numero de elementos insertados en el arbol (los que ya están no los inserta)
+	 * @return numero de elementos insertados en el arbol (los que ya estÃ¡n no los
+	 *         inserta)
 	 */
-	public int insert(T ... elements) {
-		//	 si alguno es 'null', ni siquiera se comienza a insertar (no inserta ninguno)
-	    // TODO Implementar el método
-		return 0;
+	public int insert(T... elements) {
+		// si alguno es 'null', ni siquiera se comienza a insertar (no inserta ninguno)
+		for (T t : elements) 
+			if(t == null)
+				throw new IllegalArgumentException();
+		
+		int count = 0;
+		for (T t : elements) {
+			if(!this.contains(t)) {
+				this.insert(t);
+				count++;
+			}
+		}
+		return count;
 	}
-	
-	/**
-	 * Inserta (como hoja) un nuevo elemento en el árbol de búsqueda.
-	 * 
-	 * Debe asignarse valor a su atributo father (referencia a su nodo padre o null si es la raíz)
-	 * 
-	 * No se permiten elementos null. Si element es null dispara excepción: IllegalArgumentException 
-	 *  Si el elemento ya existe en el árbol NO lo inserta.
-	 * 
-	 * @param element
-	 *            valor a insertar.
-	 * @return true si se pudo insertar (no existia ese elemento en el arbol, false en caso contrario
-	 * @throws IllegalArgumentException si element es null           
-	 */
-	public boolean insert(T element) {
-    //	TODO Implementar el método
-	
-		return false;
-	
-	}
-	
 
 	/**
-	 * Busca el elemento en el árbol.
+	 * Inserta (como hoja) un nuevo elemento en el Ã¡rbol de bÃºsqueda.
 	 * 
-	 * No se permiten elementos null. 
+	 * Debe asignarse valor a su atributo father (referencia a su nodo padre o null
+	 * si es la raÃ­z)
 	 * 
-	 * @param element   valor a buscar.
-	 * @return true si el elemento está en el árbol, false en caso contrario          
+	 * No se permiten elementos null. Si element es null dispara excepciÃ³n:
+	 * IllegalArgumentException Si el elemento ya existe en el Ã¡rbol NO lo inserta.
+	 * 
+	 * @param element valor a insertar.
+	 * @return true si se pudo insertar (no existia ese elemento en el arbol, false
+	 *         en caso contrario
+	 * @throws IllegalArgumentException si element es null
+	 */
+	public boolean insert(T element) {
+		/* Si el elemento es nulo se lanza la excepcion marcada en la documentacion */
+		if (element == null)
+			throw new IllegalArgumentException();
+
+		if (this.isEmpty()) {
+			/* Si la lista esta vacia se añade como padre */
+			this.content = element;
+			this.leftSubtree = this.emptyBST(this);
+			this.rightSubtree = this.emptyBST(this);
+		} else if (!this.contains(element)){
+			/* Si no se compara y añade al lado pertinente */
+			if (element.compareTo(this.getContent()) > 0) {
+				/* Si no hay nada en el nodo se crea */
+				if(this.getRightBST().isEmpty()) {
+					this.getRightBST().setContent(element);
+					this.getRightBST().setRightBST(this.emptyBST(this.getRightBST()));
+					this.getRightBST().setLeftBST(this.emptyBST(this.getRightBST()));
+				} else {
+					this.getRightBST().insert(element);
+				}
+			} else {
+				/* Si no hay nada en el nodo se crea */
+				if(this.getLeftBST().isEmpty()) {
+					this.getLeftBST().setContent(element);
+					this.getLeftBST().setRightBST(this.emptyBST(this.getRightBST()));
+					this.getLeftBST().setLeftBST(this.emptyBST(this.getRightBST()));
+				} else {
+					this.getLeftBST().insert(element);
+				}
+			}
+		} else {
+			/* Si el nodo ya esta no se inserta */
+			return false;
+		}
+		
+		return true;
+	}
+
+	/**
+	 * Busca el elemento en el Ã¡rbol.
+	 * 
+	 * No se permiten elementos null.
+	 * 
+	 * @param element valor a buscar.
+	 * @return true si el elemento estÃ¡ en el Ã¡rbol, false en caso contrario
 	 */
 	public boolean contains(T element) {
-		// TODO Implementar el método
+		/* Si el elemento es nulo se lanza la excepcion marcada en la documentacion */
+		if (element == null)
+			throw new IllegalArgumentException();
+
+		/* Se comprueba si es el actual (true) */
+		if(this.getContent().equals(element))
+			return true;
 		
-		return false;
+		/* Se comprueba en que hijo se deberia buscar */
+		if(element.compareTo(this.getContent()) < 0) {
+			/* Si el hijo esta vacio el elemento ya no puede estar */
+			if(this.getLeftBST().isEmpty())
+				return false;
+			/* Se llama al metodo desde el hijo */
+			return this.getLeftBST().contains(element);
+		} else {
+			if(this.getRightBST().isEmpty())
+				return false;
+			return this.getRightBST().contains(element);
+		}
 	}
-	
+
 	/**
-	 * Elimina los valores en un array del árbol.
-	 * O todos o ninguno; si alguno es 'null'o no lo contiene el árbol, no se eliminará ningún elemento
+	 * Elimina los valores en un array del Ã¡rbol. O todos o ninguno; si alguno es
+	 * 'null'o no lo contiene el Ã¡rbol, no se eliminarÃ¡ ningÃºn elemento
 	 * 
-	 * @throws NoSuchElementException si alguno de los elementos a eliminar no está en el árbol           
+	 * @throws NoSuchElementException si alguno de los elementos a eliminar no estÃ¡
+	 *                                en el Ã¡rbol
 	 */
-	public void remove(T ... elements) {
-	    // TODO Implementar el método
+	public void remove(T... elements) {
+		/* Se comprueba en todos los elementos por ver si hay algun nulo o no contenido lanzar las excepciones y no borrar nada */
+		for (T t : elements) {
+			if(t == null)
+				throw new IllegalArgumentException();
+			if(!this.contains(t))
+				throw new NoSuchElementException();
+		}
+		
+		/* Se recorre todo el array (Ya pulido) */
+		for (T t : elements) {
+			/* Se llama al metodo que elimina */
+			this.remove(t);
+		}
 	}
-	
+
 	/**
-	 * Elimina un elemento del árbol.
+	 * Elimina un elemento del Ã¡rbol.
 	 * 
-	 * Si el elemento tiene dos hijos, se tomará el criterio de sustituir el elemento por
-	 *  el menor de sus mayores y eliminar el menor de los mayores.
+	 * Si el elemento tiene dos hijos, se tomarÃ¡ el criterio de sustituir el
+	 * elemento por el menor de sus mayores y eliminar el menor de los mayores.
 	 * 
-	 * @throws NoSuchElementException si el elemento a eliminar no está en el árbol           
+	 * @throws NoSuchElementException si el elemento a eliminar no estÃ¡ en el
+	 *                                Ã¡rbol
 	 */
 	public void remove(T element) {
-		// TODO Implementar el método
-			
+		/* Si el elemento es nulo o no esta se comprueba lanzando las correspondientes excepciones */
+		if(element == null)
+			throw new IllegalArgumentException();
+		if(!this.contains(element))
+			throw new NoSuchElementException();
+		
+		/* Se situa el elemento buscando en profundidad */
+		BinarySearchTreeImpl<T> aux = this;
+		while(!aux.equals(element)) {
+			if(element.compareTo(aux.getContent()) > 0)
+				aux = aux.getRightBST();
+			else
+				aux = aux.getLeftBST();
+		}
+		/* Aux es el elemento que buscamos */
+		aux = aux.getLeftBST();
+
 	}
-	
+
 	/**
-	 * Importante: Solamente se puede recorrer el árbol una vez
+	 * Importante: Solamente se puede recorrer el Ã¡rbol una vez
 	 * 
-	 * Etiqueta cada nodo con la etiqueta "height" y el valor correspondiente a la altura del nodo.
+	 * Etiqueta cada nodo con la etiqueta "height" y el valor correspondiente a la
+	 * altura del nodo.
 	 * 
-	 * Por ejemplo, sea un árbol "A":
+	 * Por ejemplo, sea un Ã¡rbol "A":
 	 * 
-	 * {10, {5, {2, ∅, ∅}, ∅}, {20, {15, ∅, ∅}, {30, ∅, ∅}}}
+	 * {10, {5, {2, âˆ…, âˆ…}, âˆ…}, {20, {15, âˆ…, âˆ…}, {30, âˆ…, âˆ…}}}
 	 * 
-     * 10
-     * |  5
-     * |  |  2
-     * |  |  |  ∅
-     * |  |  |  ∅
-     * |  |  ∅
-     * |  20
-     * |  |  15
-     * |  |  |  ∅
-     * |  |  |  ∅ 
-     * |  |  30
-     * |  |  |  ∅
-     * |  |  |  ∅
-     * 
+	 * 10 | 5 | | 2 | | | âˆ… | | | âˆ… | | âˆ… | 20 | | 15 | | | âˆ… | | | âˆ… | |
+	 * 30 | | | âˆ… | | | âˆ…
 	 * 
-	 * el árbol quedaría etiquetado:
 	 * 
-	 *   {10 [(height, 1)], {5 [(height, 2)], {2 [(height, 3)], ∅, ∅}, ∅},
-	 *               {20 [(height, 2)], {15 [(height, 3)], {12 [(height, 4)], ∅, ∅}, ∅}, ∅}}
+	 * el Ã¡rbol quedarÃ­a etiquetado:
+	 * 
+	 * {10 [(height, 1)], {5 [(height, 2)], {2 [(height, 3)], âˆ…, âˆ…}, âˆ…}, {20
+	 * [(height, 2)], {15 [(height, 3)], {12 [(height, 4)], âˆ…, âˆ…}, âˆ…}, âˆ…}}
 	 * 
 	 */
 	public void tagHeight() {
-	// TODO implementar el método
+		// TODO implementar el mÃ©todo
 	}
-	
-	
+
 	/**
-	 * Importante: Solamente se puede recorrer el árbol una vez
+	 * Importante: Solamente se puede recorrer el Ã¡rbol una vez
 	 * 
-	 * Etiqueta cada nodo con el valor correspondiente al número de descendientes que tiene en este árbol.
+	 * Etiqueta cada nodo con el valor correspondiente al nÃºmero de descendientes
+	 * que tiene en este Ã¡rbol.
 	 * 
-	 * Por ejemplo, sea un árbol "A":
+	 * Por ejemplo, sea un Ã¡rbol "A":
 	 * 
-	 * {10, {5, {2, ∅, ∅}, ∅}, {20, {15, ∅, ∅}, {30, ∅, ∅}}}
+	 * {10, {5, {2, âˆ…, âˆ…}, âˆ…}, {20, {15, âˆ…, âˆ…}, {30, âˆ…, âˆ…}}}
 	 * 
-     * 10
-     * |  5
-     * |  |  2
-     * |  |  |  ∅
-     * |  |  |  ∅
-     * |  |  ∅
-     * |  20
-     * |  |  15
-     * |  |  |  ∅
-     * |  |  |  ∅ 
-     * |  |  30
-     * |  |  |  ∅
-     * |  |  |  ∅
-     * 
+	 * 10 | 5 | | 2 | | | âˆ… | | | âˆ… | | âˆ… | 20 | | 15 | | | âˆ… | | | âˆ… | |
+	 * 30 | | | âˆ… | | | âˆ…
 	 * 
-	 * el árbol quedaría etiquetado:
 	 * 
-	 *  {10 [(decendents, 5)], 
-	 *       {5 [(decendents, 1)], {2 [(decendents, 0)], ∅, ∅}, ∅}, 
-	 *       {20 [(decendents, 2)], {15 [(decendents, 0)], ∅, ∅}, {30 [(decendents, 0)], ∅, ∅}}}
+	 * el Ã¡rbol quedarÃ­a etiquetado:
+	 * 
+	 * {10 [(decendents, 5)], {5 [(decendents, 1)], {2 [(decendents, 0)], âˆ…, âˆ…},
+	 * âˆ…}, {20 [(decendents, 2)], {15 [(decendents, 0)], âˆ…, âˆ…}, {30
+	 * [(decendents, 0)], âˆ…, âˆ…}}}
 	 * 
 	 * 
 	 */
 	public void tagDecendents() {
-	   // TODO Implementar el método
-		
+		// TODO Implementar el mÃ©todo
+
 	}
-		
-	
-	
-	/**	
-	 * Devuelve un iterador que recorre los elementos del arbol por niveles según 
-         * el recorrido en anchura
+
+	/**
+	 * Devuelve un iterador que recorre los elementos del arbol por niveles segÃºn
+	 * el recorrido en anchura
 	 * 
-	 * Por ejemplo, con el árbol
+	 * Por ejemplo, con el Ã¡rbol
 	 * 
-	 * 		{50, {30, {10, ∅, ∅}, {40, ∅, ∅}}, {80, {60, ∅, ∅}, ∅}}
+	 * {50, {30, {10, âˆ…, âˆ…}, {40, âˆ…, âˆ…}}, {80, {60, âˆ…, âˆ…}, âˆ…}}
 	 * 
-	 * y devolvería el iterador que recorrería los nodos en el orden: 50, 30, 80, 10, 40, 60
+	 * y devolverÃ­a el iterador que recorrerÃ­a los nodos en el orden: 50, 30, 80,
+	 * 10, 40, 60
 	 * 
-	 * 		
+	 * 
 	 * 
 	 * @return iterador para el recorrido en anchura
 	 */
 
 	public Iterator<T> iteratorWidth() {
-		//	TODO Implementar método
-		// puede implementarse creando una lista con el recorrido en anchura de los elementos del árbol y devolver el iterador de dicha lista
+		// TODO Implementar mÃ©todo
+		// puede implementarse creando una lista con el recorrido en anchura de los
+		// elementos del Ã¡rbol y devolver el iterador de dicha lista
 		return null;
-	}	
-	
-	
+	}
 
 	/**
-	 * Importante: Solamente se puede recorrer el árbol una vez
+	 * Importante: Solamente se puede recorrer el Ã¡rbol una vez
 	 * 
-	 * Calcula y devuelve el número de nodos que son hijos únicos 
-	 *  y etiqueta cada nodo que sea hijo único (no tenga hermano hijo del mismo padre) 
-	 *   con la etiqueta "onlySon" y el valor correspondiente a su posición según el 
-	 *   recorrido inorden en este árbol. 
-	 *   
-	 *   La raíz no se considera hijo único.
+	 * Calcula y devuelve el nÃºmero de nodos que son hijos Ãºnicos y etiqueta cada
+	 * nodo que sea hijo Ãºnico (no tenga hermano hijo del mismo padre) con la
+	 * etiqueta "onlySon" y el valor correspondiente a su posiciÃ³n segÃºn el
+	 * recorrido inorden en este Ã¡rbol.
 	 * 
-	 * Por ejemplo, sea un árbol "A", que tiene 3 hijos únicos, los va etiquetando según 
-	 * su recorrido en inorden. 
+	 * La raÃ­z no se considera hijo Ãºnico.
 	 * 
-	 * {10, {5, {2, ∅, ∅}, ∅}, {20, {15, ∅, ∅}, {30, ∅, ∅}}}
+	 * Por ejemplo, sea un Ã¡rbol "A", que tiene 3 hijos Ãºnicos, los va etiquetando
+	 * segÃºn su recorrido en inorden.
 	 * 
-     *
-	 * el árbol quedaría etiquetado:
+	 * {10, {5, {2, âˆ…, âˆ…}, âˆ…}, {20, {15, âˆ…, âˆ…}, {30, âˆ…, âˆ…}}}
 	 * 
-	 * {10, {5, {2 [(onlySon, 1)], ∅, ∅}, ∅}, 
-	 *      {20, {15 [(onlySon, 3)], {12 [(onlySon, 2)], ∅, ∅}, ∅}, ∅}}
+	 *
+	 * el Ã¡rbol quedarÃ­a etiquetado:
+	 * 
+	 * {10, {5, {2 [(onlySon, 1)], âˆ…, âˆ…}, âˆ…}, {20, {15 [(onlySon, 3)], {12
+	 * [(onlySon, 2)], âˆ…, âˆ…}, âˆ…}, âˆ…}}
 	 * 
 	 */
 	public int tagOnlySonInorder() {
-		// TODO Implementar el método
+		// TODO Implementar el mÃ©todo
 		return 0;
 	}
-	
-	
-	
-}
 
+}
