@@ -7,6 +7,8 @@ import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.Queue;
 
+import javax.swing.tree.TreeNode;
+
 /**
  * Ã�rbol binario de bÃºsqueda (binary search tree, BST).
  * 
@@ -86,11 +88,11 @@ public class BinarySearchTreeImpl<T extends Comparable<? super T>> extends Abstr
 
 	public BinarySearchTreeImpl(BinarySearchTreeImpl<T> father) {
 		this.father = father;
-
 	}
 
 	private BinarySearchTreeImpl<T> emptyBST(BinarySearchTreeImpl<T> father) {
 		return new BinarySearchTreeImpl<T>(father);
+
 	}
 
 	/**
@@ -104,19 +106,21 @@ public class BinarySearchTreeImpl<T extends Comparable<? super T>> extends Abstr
 	 *         inserta)
 	 */
 	public int insert(Collection<T> elements) {
-		/* Si alguno es 'null', ni siquiera se comienza a insertar (no inserta ninguno) */
-		for (T t : elements) 
-			if(t == null)
+		/*
+		 * Si alguno es 'null', ni siquiera se comienza a insertar (no inserta ninguno)
+		 */
+		for (T t : elements)
+			if (t == null)
 				throw new IllegalArgumentException();
-		
+
 		int count = 0;
 		for (T t : elements) {
-			if(!this.contains(t)) {
+			if (!this.contains(t)) {
 				this.insert(t);
 				count++;
 			}
 		}
-		
+
 		return count;
 	}
 
@@ -132,13 +136,13 @@ public class BinarySearchTreeImpl<T extends Comparable<? super T>> extends Abstr
 	 */
 	public int insert(T... elements) {
 		// si alguno es 'null', ni siquiera se comienza a insertar (no inserta ninguno)
-		for (T t : elements) 
-			if(t == null)
+		for (T t : elements)
+			if (t == null)
 				throw new IllegalArgumentException();
-		
+
 		int count = 0;
 		for (T t : elements) {
-			if(!this.contains(t)) {
+			if (!this.contains(t)) {
 				this.insert(t);
 				count++;
 			}
@@ -170,11 +174,11 @@ public class BinarySearchTreeImpl<T extends Comparable<? super T>> extends Abstr
 			this.content = element;
 			this.leftSubtree = this.emptyBST(this);
 			this.rightSubtree = this.emptyBST(this);
-		} else if (!this.contains(element)){
+		} else if (!this.contains(element)) {
 			/* Si no se compara y añade al lado pertinente */
 			if (element.compareTo(this.getContent()) > 0) {
 				/* Si no hay nada en el nodo se crea */
-				if(this.getRightBST().isEmpty()) {
+				if (this.getRightBST().isEmpty()) {
 					this.getRightBST().setContent(element);
 					this.getRightBST().setRightBST(this.emptyBST(this.getRightBST()));
 					this.getRightBST().setLeftBST(this.emptyBST(this.getRightBST()));
@@ -183,7 +187,7 @@ public class BinarySearchTreeImpl<T extends Comparable<? super T>> extends Abstr
 				}
 			} else {
 				/* Si no hay nada en el nodo se crea */
-				if(this.getLeftBST().isEmpty()) {
+				if (this.getLeftBST().isEmpty()) {
 					this.getLeftBST().setContent(element);
 					this.getLeftBST().setRightBST(this.emptyBST(this.getRightBST()));
 					this.getLeftBST().setLeftBST(this.emptyBST(this.getRightBST()));
@@ -195,7 +199,7 @@ public class BinarySearchTreeImpl<T extends Comparable<? super T>> extends Abstr
 			/* Si el nodo ya esta no se inserta */
 			return false;
 		}
-		
+
 		return true;
 	}
 
@@ -212,22 +216,25 @@ public class BinarySearchTreeImpl<T extends Comparable<? super T>> extends Abstr
 		if (element == null)
 			throw new IllegalArgumentException();
 
-		/* Se comprueba si es el actual (true) */
-		if(this.getContent().equals(element))
-			return true;
-		
-		/* Se comprueba en que hijo se deberia buscar */
-		if(element.compareTo(this.getContent()) < 0) {
-			/* Si el hijo esta vacio el elemento ya no puede estar */
-			if(this.getLeftBST().isEmpty())
-				return false;
-			/* Se llama al metodo desde el hijo */
-			return this.getLeftBST().contains(element);
-		} else {
-			if(this.getRightBST().isEmpty())
-				return false;
-			return this.getRightBST().contains(element);
+		if (!this.isEmpty()) {
+			/* Se comprueba si es el actual (true) */
+			if (this.getContent().equals(element))
+				return true;
+
+			/* Se comprueba en que hijo se deberia buscar */
+			if (element.compareTo(this.getContent()) < 0) {
+				/* Si el hijo esta vacio el elemento ya no puede estar */
+				if (this.getLeftBST().isEmpty())
+					return false;
+				/* Se llama al metodo desde el hijo */
+				return this.getLeftBST().contains(element);
+			} else {
+				if (this.getRightBST().isEmpty())
+					return false;
+				return this.getRightBST().contains(element);
+			}
 		}
+		return false;
 	}
 
 	/**
@@ -238,14 +245,17 @@ public class BinarySearchTreeImpl<T extends Comparable<? super T>> extends Abstr
 	 *                                en el Ã¡rbol
 	 */
 	public void remove(T... elements) {
-		/* Se comprueba en todos los elementos por ver si hay algun nulo o no contenido lanzar las excepciones y no borrar nada */
+		/*
+		 * Se comprueba en todos los elementos por ver si hay algun nulo o no contenido
+		 * lanzar las excepciones y no borrar nada
+		 */
 		for (T t : elements) {
-			if(t == null)
+			if (t == null)
 				throw new IllegalArgumentException();
-			if(!this.contains(t))
+			if (!this.contains(t))
 				throw new NoSuchElementException();
 		}
-		
+
 		/* Se recorre todo el array (Ya pulido) */
 		for (T t : elements) {
 			/* Se llama al metodo que elimina */
@@ -263,23 +273,85 @@ public class BinarySearchTreeImpl<T extends Comparable<? super T>> extends Abstr
 	 *                                Ã¡rbol
 	 */
 	public void remove(T element) {
-		/* Si el elemento es nulo o no esta se comprueba lanzando las correspondientes excepciones */
-		if(element == null)
+		/*
+		 * Si el elemento es nulo o no esta se comprueba lanzando las correspondientes
+		 * excepciones
+		 */
+		if (element == null)
 			throw new IllegalArgumentException();
-		if(!this.contains(element))
+		if (!this.contains(element))
 			throw new NoSuchElementException();
-		
+
 		/* Se situa el elemento buscando en profundidad */
 		BinarySearchTreeImpl<T> aux = this;
-		while(!aux.equals(element)) {
-			if(element.compareTo(aux.getContent()) > 0)
+		while (!aux.getContent().equals(element)) {
+			if (element.compareTo(aux.getContent()) > 0)
 				aux = aux.getRightBST();
 			else
 				aux = aux.getLeftBST();
 		}
-		/* Aux es el elemento que buscamos */
-		aux = aux.getLeftBST();
 
+		if (aux.isLeaf()) {
+			aux.setLeftBST(null);
+			aux.setRightBST(null);
+			aux.setContent(null);
+		} else if (aux.getRightBST().getContent() != null) {
+			if (aux.getLeftBST().getContent() != null) {
+				BinarySearchTreeImpl<T> menor = aux.getRightBST().getMenor();
+				aux.setContent(menor.getContent());
+				menor.setContent(null);
+			} else {
+				aux.setContent(aux.getRightBST().getContent());
+				if (aux.getRightBST().getLeftBST().getContent() != null) {
+					aux.setLeftBST(aux.getRightBST().getLeftBST());
+					aux.getLeftBST().father = aux;
+				} else {
+					aux.setLeftBST(emptyBST(aux));
+				}
+
+				if (aux.getRightBST().getRightBST().getContent() != null) {
+					aux.setRightBST(aux.getRightBST().getRightBST());
+					aux.getRightBST().father = aux;
+				} else {
+					aux.setRightBST(emptyBST(aux));
+				}
+			}
+		} else {
+			aux.setContent(aux.getLeftBST().getContent());
+			if (aux.getLeftBST().getRightBST().getContent() != null) {
+				aux.setRightBST(aux.getLeftBST().getRightBST());
+				aux.getRightBST().father = aux;
+			} else {
+				aux.setRightBST(emptyBST(aux));
+			}
+
+			if (aux.getLeftBST().getLeftBST().getContent() != null) {
+				aux.setLeftBST(aux.getLeftBST().getLeftBST());
+				aux.getLeftBST().father = aux;
+			} else {
+				aux.setLeftBST(emptyBST(aux));
+			}
+
+		}
+	}
+
+	private BinarySearchTreeImpl<T> getMenor() {
+
+		if (this.isLeaf()) {
+
+			this.setLeftBST(null);
+			this.setRightBST(null);
+			return this;
+		} else if (this.getLeftBST() != null) {
+
+			return this.getLeftBST().getMenor();
+		} else {
+
+			BinarySearchTreeImpl<T> n = this;
+			this.getRightBST().father = this.father;
+			this.father.setLeftBST(this.getRightBST());
+			return n;
+		}
 	}
 
 	/**
@@ -303,7 +375,22 @@ public class BinarySearchTreeImpl<T extends Comparable<? super T>> extends Abstr
 	 * 
 	 */
 	public void tagHeight() {
-		// TODO implementar el mÃ©todo
+		/* Llamada al metodo recursivo con la altura de la raiz (1) */
+		this.tagHeightRec(1);
+	}
+
+	private void tagHeightRec(int actualHeight) {
+		if (this.getContent() != null) {
+			/* Si ese nodo no esta vacio se taggea a la altura actual */
+			this.setTag("height", actualHeight);
+
+			/*
+			 * Se llama al metodo desde los hijos para que si existen se taggen a una altura
+			 * mas
+			 */
+			this.getLeftBST().tagHeightRec(++actualHeight);
+			this.getRightBST().tagHeightRec(actualHeight);
+		}
 	}
 
 	/**
@@ -329,8 +416,30 @@ public class BinarySearchTreeImpl<T extends Comparable<? super T>> extends Abstr
 	 * 
 	 */
 	public void tagDecendents() {
-		// TODO Implementar el mÃ©todo
+		/*
+		 * Llamada al metodo recursivo (necesario para que devuelva int con sus
+		 * descendientes hacia arriba)
+		 */
+		this.tagDecendentsRec();
+	}
 
+	private int tagDecendentsRec() {
+		int actualDescendents = 0;
+
+		/* Si el hijo izquierdo no esta vacio se buscan sus descendientes */
+		if (this.getLeftBST().getContent() != null) {
+			actualDescendents += this.getLeftBST().tagDecendentsRec();
+		}
+		/* Igual pero en el derecho */
+		if (this.getRightBST().getContent() != null) {
+			actualDescendents += this.getRightBST().tagDecendentsRec();
+		}
+
+		/* Se taguea el numero de descendientes del nodo en cuestion */
+		this.setTag("decendents", actualDescendents);
+
+		/* Se devuelve ese numero + 1 (el mismo) al de arriba */
+		return ++actualDescendents;
 	}
 
 	/**
@@ -350,10 +459,22 @@ public class BinarySearchTreeImpl<T extends Comparable<? super T>> extends Abstr
 	 */
 
 	public Iterator<T> iteratorWidth() {
-		// TODO Implementar mÃ©todo
-		// puede implementarse creando una lista con el recorrido en anchura de los
-		// elementos del Ã¡rbol y devolver el iterador de dicha lista
-		return null;
+		/* La lista en la que se van a añadir los elementos */
+		LinkedList<T> listaAnchura = new LinkedList<>();
+		Queue<BinarySearchTreeImpl<T>> colaDeNodos = new LinkedList<>();
+		colaDeNodos.add(this);
+
+		BinarySearchTreeImpl<T> aux;
+		while (!colaDeNodos.isEmpty()) {
+			aux = colaDeNodos.peek();
+			if (!aux.isEmpty()) {
+				listaAnchura.add(aux.getContent());
+				colaDeNodos.add(aux.getLeftBST());
+				colaDeNodos.add(aux.getRightBST());
+			}
+
+		}
+		return listaAnchura.iterator();
 	}
 
 	/**
@@ -379,8 +500,30 @@ public class BinarySearchTreeImpl<T extends Comparable<? super T>> extends Abstr
 	 * 
 	 */
 	public int tagOnlySonInorder() {
-		// TODO Implementar el mÃ©todo
-		return 0;
+		/* Si la lista esta vacia no tendra hijos unicos */
+		if (this.isEmpty())
+			return 0;
+		
+		/* Llamada recursiva desde la raiz */
+		return this.tagOnlySonInorderRec(0);
 	}
 
+	private int tagOnlySonInorderRec(int actualPos) {
+		if (this.isLeaf()) {
+			/* Si se llega a una hoja no habra mas hijos unicos debajo */
+			return actualPos;
+		} else if (this.getLeftBST().isEmpty()) {
+			/* Si un nodo esta vacio se busca en el opuesto */
+			actualPos = this.getRightBST().tagOnlySonInorderRec(actualPos);
+			this.getRightBST().setTag("onlySon", ++actualPos);
+		} else if (this.getRightBST().isEmpty()) {
+			actualPos = getLeftBST().tagOnlySonInorderRec(actualPos);
+			this.getLeftBST().setTag("onlySon", ++actualPos);
+		} else {
+			/* Si ningun nodo esta vacio se busca en sus hijos de ambos lados */
+			actualPos = this.getLeftBST().tagOnlySonInorderRec(actualPos);
+			actualPos = this.getRightBST().tagOnlySonInorderRec(actualPos);
+		}
+		return actualPos;
+	}
 }
