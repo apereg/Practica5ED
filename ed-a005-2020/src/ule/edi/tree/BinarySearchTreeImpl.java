@@ -291,17 +291,23 @@ public class BinarySearchTreeImpl<T extends Comparable<? super T>> extends Abstr
 				aux = aux.getLeftBST();
 		}
 
+		/* Aux es el elemento a buscar */
 		if (aux.isLeaf()) {
+			/* Caso 1: Es una hoja */
 			aux.setLeftBST(null);
 			aux.setRightBST(null);
 			aux.setContent(null);
 		} else if (aux.getRightBST().getContent() != null) {
+			/* Si tiene hijo derecho */
 			if (aux.getLeftBST().getContent() != null) {
+				/* Caso 3: Tiene ambos hijos */
 				BinarySearchTreeImpl<T> menor = aux.getRightBST().getMenor();
 				aux.setContent(menor.getContent());
 				menor.setContent(null);
 			} else {
-				aux.setContent(aux.getRightBST().getContent());
+				/* Caso 2: Solo tiene el hijo derecho */
+				aux.setContent(aux.getRightBST().getContent()); // Le asigno el contenido
+				/* Si este tiene algun hijo se sube, si no se le asigna uno vacio */
 				if (aux.getRightBST().getLeftBST().getContent() != null) {
 					aux.setLeftBST(aux.getRightBST().getLeftBST());
 					aux.getLeftBST().father = aux;
@@ -317,6 +323,7 @@ public class BinarySearchTreeImpl<T extends Comparable<? super T>> extends Abstr
 				}
 			}
 		} else {
+			/* Caso 2: Solo tiene el hijo izquierdo */
 			aux.setContent(aux.getLeftBST().getContent());
 			if (aux.getLeftBST().getRightBST().getContent() != null) {
 				aux.setRightBST(aux.getLeftBST().getRightBST());
@@ -336,21 +343,17 @@ public class BinarySearchTreeImpl<T extends Comparable<? super T>> extends Abstr
 	}
 
 	private BinarySearchTreeImpl<T> getMenor() {
-
 		if (this.isLeaf()) {
-
 			this.setLeftBST(null);
 			this.setRightBST(null);
 			return this;
-		} else if (this.getLeftBST() != null) {
-
-			return this.getLeftBST().getMenor();
-		} else {
-
+		} else if (this.getLeftBST().isEmpty()) {
 			BinarySearchTreeImpl<T> n = this;
 			this.getRightBST().father = this.father;
 			this.father.setLeftBST(this.getRightBST());
 			return n;
+		} else {
+			return this.getLeftBST().getMenor();
 		}
 	}
 
@@ -461,19 +464,25 @@ public class BinarySearchTreeImpl<T extends Comparable<? super T>> extends Abstr
 	public Iterator<T> iteratorWidth() {
 		/* La lista en la que se van a añadir los elementos */
 		LinkedList<T> listaAnchura = new LinkedList<>();
+
+		/* La cola de elementos que ir insertando */
 		Queue<BinarySearchTreeImpl<T>> colaDeNodos = new LinkedList<>();
 		colaDeNodos.add(this);
 
 		BinarySearchTreeImpl<T> aux;
+		/* Mientras haya algun nodo en cola que añadir */
 		while (!colaDeNodos.isEmpty()) {
-			aux = colaDeNodos.peek();
-			if (!aux.isEmpty()) {
+			/* Se coge el nodo en cuestion */
+			aux = colaDeNodos.poll();
+			if (aux.getContent() != null) {
+				/* Si este no esta vacio se añade a la lista y se meten sus hijos a la cola */
 				listaAnchura.add(aux.getContent());
 				colaDeNodos.add(aux.getLeftBST());
 				colaDeNodos.add(aux.getRightBST());
 			}
-
 		}
+
+		/* Se devuelve el iterador de la lista creada */
 		return listaAnchura.iterator();
 	}
 
@@ -503,7 +512,7 @@ public class BinarySearchTreeImpl<T extends Comparable<? super T>> extends Abstr
 		/* Si la lista esta vacia no tendra hijos unicos */
 		if (this.isEmpty())
 			return 0;
-		
+
 		/* Llamada recursiva desde la raiz */
 		return this.tagOnlySonInorderRec(0);
 	}
